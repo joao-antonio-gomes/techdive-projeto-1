@@ -18,7 +18,7 @@ public class ContaDB {
         ContaDB.contas.add(conta);
     }
 
-    public static void listarTodasContaCorrentes() {
+    public static void listarTodasContasCorrentes() {
         for (Conta conta : contas) {
             if (conta instanceof ContaCorrente) {
                 System.out.println(conta.toString());
@@ -57,13 +57,24 @@ public class ContaDB {
     }
 
     public static void listarContaPorValorInvestido() {
+        ArrayList<ContaInvestimento> contasInvestimento = new ArrayList<>();
         for (Conta conta : contas) {
             if (conta instanceof ContaInvestimento) {
-                ContaInvestimento contaInvestimento = (ContaInvestimento) conta;
-                if (contaInvestimento.getSaldo() > 0) {
-                    System.out.println(conta.toString());
+                if (conta.getSaldo() > 0) {
+                    contasInvestimento.add((ContaInvestimento) conta);
                 }
             }
         }
+        contasInvestimento.sort((o1, o2) -> (int) (o2.getSaldo() - o1.getSaldo()));
+        contasInvestimento.forEach(ContaInvestimento::toString);
+    }
+
+    public static Conta getContaByNumero(int numeroConta) {
+        for (Conta conta : contas) {
+            if (conta.getNumeroConta() == numeroConta) {
+                return conta;
+            }
+        }
+        return null;
     }
 }

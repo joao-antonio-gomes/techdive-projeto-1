@@ -18,7 +18,7 @@ public class LogOperacoesDB {
 
     public static void getLogOperacoesByConta(Conta conta) {
         for (LogOperacoes logOperacoes : LogOperacoesDB.logOperacoes) {
-            if(logOperacoes.getContaOrigem() == conta.getConta()) {
+            if(logOperacoes.getNumeroContaOrigem() == conta.getNumeroConta()) {
                 System.out.println(logOperacoes.toString());
             }
         }

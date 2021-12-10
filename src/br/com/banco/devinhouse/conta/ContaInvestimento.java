@@ -12,7 +12,7 @@ public class ContaInvestimento extends Conta {
     }
 
     public String getTipoInvestimento() {
-        return tipoInvestimento.getDescricao() + " - " + tipoInvestimento.getTaxa();
+        return "Seu investimento é do tipo " + tipoInvestimento.getDescricao() + ", com taxa de " + tipoInvestimento.getTaxa() * 100 + "% ao ano.";
     }
 
     public void calculaRendimentoAnual() {

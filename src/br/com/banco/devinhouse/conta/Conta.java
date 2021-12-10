@@ -3,14 +3,14 @@ package br.com.banco.devinhouse.conta;
 import br.com.banco.devinhouse.cpf.Cpf;
 import br.com.banco.devinhouse.database.ContaDB;
 import br.com.banco.devinhouse.enumerators.AgenciaEnum;
-import br.com.banco.devinhouse.exceptions.TransacaoException;
+import br.com.banco.devinhouse.enumerators.TipoOperacoesEnum;
 
 public abstract class Conta {
     private static int numeroContas = 0;
     private String nome;
     private Cpf cpf;
     private double rendaMensal;
-    private int conta;
+    private int numeroConta;
     private AgenciaEnum agencia;
     private double saldo;
 
@@ -20,7 +20,7 @@ public abstract class Conta {
         this.rendaMensal = rendaMensal;
         this.agencia = agencia;
         this.saldo = 0;
-        this.conta = ++numeroContas;
+        this.numeroConta = ++numeroContas;
 
         ContaDB.addConta(this);
     }
@@ -45,51 +45,59 @@ public abstract class Conta {
         return saldo;
     }
 
-    public int getConta() {
-        return conta;
+    public int getNumeroConta() {
+        return numeroConta;
     }
 
     public void obterDadosCadastrais() {
         System.out.println("Nome: " + this.nome);
         System.out.println("CPF: " + this.cpf);
         System.out.println("Renda Mensal: " + this.rendaMensal);
-        System.out.println("Conta: " + this.conta);
+        System.out.println("Conta: " + this.numeroConta);
         System.out.println("Agencia: " + this.agencia);
         System.out.println("Saldo: " + this.saldo);
     }
 
-    public void depositar(double valor) throws TransacaoException {
+    public boolean depositar(double valor) {
         if (valor < 0) {
-            throw new TransacaoException("Por favor, informe um valor acima de zero!");
+            System.out.println("Por favor, informe um valor acima de zero!");
+            return false;
         }
         this.saldo += valor;
         System.out.println("Depósito realizado com sucesso!");
-        new LogOperacoes(this, this, valor);
+        new LogOperacoes(this, this, valor, TipoOperacoesEnum.DEPOSITO);
+        return true;
     }
 
-    public void sacar(double valor) throws TransacaoException {
+    public boolean sacar(double valor) {
         if (valor < 0) {
-            throw new TransacaoException("Por favor, informe um valor acima de zero!");
+            System.out.println("Por favor, informe um valor acima de zero!");
+            return false;
         }
         if (this.saldo < valor) {
-            throw new TransacaoException("Saldo insuficiente!");
+            System.out.println("Saldo insuficiente!");
+            return false;
         }
         this.saldo -= valor;
         System.out.println("Saque realizado com sucesso!");
-        new LogOperacoes(this, this, valor);
+        new LogOperacoes(this, this, valor, TipoOperacoesEnum.SAQUE);
+        return true;
     }
 
-    public void transferir(Conta contaDestino, double valor) throws TransacaoException {
+    public boolean transferir(Conta contaDestino, double valor) {
         if (valor < 0) {
-            throw new TransacaoException("Por favor, informe um valor acima de zero!");
+            System.out.println("Por favor, informe um valor acima de zero!");
+            return false;
         }
         if (this.saldo < valor) {
-            throw new TransacaoException("Saldo insuficiente!");
+            System.out.println("Saldo insuficiente!");
+            return false;
         }
-        this.sacar(valor);
-        contaDestino.depositar(valor);
+        this.setSaldo(this.getSaldo() - valor);
+        contaDestino.setSaldo(contaDestino.getSaldo() + valor);
         System.out.println("Transferência realizada com sucesso!");
-        new LogOperacoes(this, contaDestino, valor);
+        new LogOperacoes(this, contaDestino, valor, TipoOperacoesEnum.TRANSFERENCIA);
+        return true;
     }
 
     public void extrato() {
@@ -98,7 +106,8 @@ public abstract class Conta {
         System.out.println("Saldo: R$ " + saldo);
     }
 
-    public void alterarDadosCadastrais(int escolha, String novoValor) throws TransacaoException {
+    public boolean alterarDadosCadastrais(int escolha, String novoValor) {
+        boolean bool = true;
         switch (escolha) {
             case 1:
                 this.nome = novoValor;
@@ -109,17 +118,23 @@ public abstract class Conta {
             case 3:
                 int valor = Integer.parseInt(novoValor);
                 this.agencia = AgenciaEnum.values()[valor];
-                ;
                 break;
             default:
-                throw new TransacaoException("Opção inválida!");
+                System.out.println("Opção inválida!");
+                bool = false;
+                break;
         }
         System.out.println("Dados alterados com sucesso!");
+        return bool;
     }
 
 
     @Override
     public String toString() {
-        return "Titular : " + this.nome + "\nCPF : " + this.cpf + "\nRenda Mensal : " + this.rendaMensal + "\nConta : " + this.conta + "\nAgencia : " + this.agencia + "\nSaldo : " + this.saldo;
+        return "Titular : " + this.nome + "\nCPF : " + this.cpf.getCpf() + "\nRenda Mensal : " + this.rendaMensal + "\nConta : " + this.numeroConta + "\nAgencia : " + this.agencia.getCidade() + " - " + this.agencia.getCodigo() + "\nSaldo : " + this.saldo;
+    }
+
+    protected void setSaldo(double valor) {
+        this.saldo = valor;
     }
 }

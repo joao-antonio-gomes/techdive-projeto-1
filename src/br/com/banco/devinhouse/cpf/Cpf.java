@@ -1,27 +1,29 @@
 package br.com.banco.devinhouse.cpf;
 
-import br.com.banco.devinhouse.exceptions.CpfException;
 
 public class Cpf {
     private String cpf;
 
     public Cpf(String cpf) {
-        try {
-            this.cpf = cpfEhValido(cpf);
-        } catch (CpfException e) {
-            System.out.println(e.getMessage());
+        if (cpfEhValido(cpf)) {
+            this.cpf = formataCpf(cpf);
         }
+    }
+
+    private String formataCpf(String cpf) {
+        return cpf.substring(0, 3) + "." + cpf.substring(3, 6) + "." + cpf.substring(6, 9) + "-" + cpf.substring(9, 11);
     }
 
     public String getCpf() {
         return cpf;
     }
 
-    public String cpfEhValido(String cpf) throws CpfException {
+    public static boolean cpfEhValido(String cpf) {
         cpf = cpf.replaceAll("[^0-9]", "");
 
         if (cpf.length() != 11) {
-            throw new CpfException("CPF deve conter 11 dígitos!");
+            System.out.println("CPF deve conter 11 dígitos!");
+            return false;
         }
 
         int[] cpfArray = new int[11];
@@ -40,7 +42,8 @@ public class Cpf {
         }
 
         if (digito1 != cpfArray[9]) {
-            throw new CpfException("CPF inválido!");
+            System.out.println("CPF inválido!");
+            return false;
         }
 
         soma = 0;
@@ -54,9 +57,10 @@ public class Cpf {
         }
 
         if (digito2 != cpfArray[10]) {
-            throw new CpfException("CPF inválido!");
+            System.out.println("CPF inválido!");
+            return false;
         }
 
-        return cpf.substring(0, 3) + "." + cpf.substring(3, 6) + "." + cpf.substring(6, 9) + "-" + cpf.substring(9);
+        return true;
     }
 }

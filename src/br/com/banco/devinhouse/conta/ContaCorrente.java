@@ -1,7 +1,7 @@
 package br.com.banco.devinhouse.conta;
 
 import br.com.banco.devinhouse.enumerators.AgenciaEnum;
-import br.com.banco.devinhouse.exceptions.TransacaoException;
+import br.com.banco.devinhouse.enumerators.TipoOperacoesEnum;
 
 public class ContaCorrente extends Conta {
     private double chequeEspecial;
@@ -12,10 +12,14 @@ public class ContaCorrente extends Conta {
     }
 
     @Override
-    public void sacar(double valor) throws TransacaoException {
+    public boolean sacar(double valor) {
         if (valor > (this.getSaldo() + this.chequeEspecial)) {
-            throw new TransacaoException("Saldo insuficiente");
+            System.out.println("Saldo insuficiente");
+            return false;
         }
-        this.sacar(this.getSaldo() - valor);
+        this.setSaldo(this.getSaldo() - valor);
+        System.out.println("Saque realizado com sucesso!");
+        new LogOperacoes(this, this, valor, TipoOperacoesEnum.SAQUE);
+        return true;
     }
 }
