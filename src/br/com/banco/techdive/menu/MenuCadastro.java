@@ -57,11 +57,23 @@ public class MenuCadastro {
         double renda = scanner.nextDouble();
         Utils.separaLinha();
         System.out.println("\nDigite o número da agência do cliente: ");
+        int codigoAgencia = scanner.nextInt();
+        ArrayList<Integer> opcoes = new ArrayList<>();
+        for (AgenciaEnum agencia : AgenciaEnum.values()) {
+            opcoes.add(agencia.ordinal());
+        }
         for (AgenciaEnum agencia : AgenciaEnum.values()) {
             System.out.println(agencia.ordinal() + " - Cidade: " + agencia.getCidade() + " - Código: " + agencia.getCodigo());
         }
-        int codigoAgencia = scanner.nextInt();
+        while (!opcoes.contains(scanner.nextInt())) {
+            System.out.println("\nDigite um código válido: ");
+            for (AgenciaEnum agencia : AgenciaEnum.values()) {
+                System.out.println(agencia.ordinal() + " - Cidade: " + agencia.getCidade() + " - Código: " + agencia.getCodigo());
+            }
+        }
+
         AgenciaEnum agencia = AgenciaEnum.values()[codigoAgencia];
+
 
         Conta conta = null;
 
