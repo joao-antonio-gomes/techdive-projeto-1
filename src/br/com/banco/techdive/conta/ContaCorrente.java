@@ -12,18 +12,7 @@ public class ContaCorrente extends Conta {
         this.chequeEspecial = rendaMensal * 0.5;
     }
 
-    @Override
-    public boolean sacar(double valor) {
-        if (valor > (this.getSaldo() + this.chequeEspecial)) {
-            System.out.println("Saldo insuficiente");
-            return false;
-        }
-        this.setSaldo(this.getSaldo() - valor);
-        Utils.separaLinha();
-        System.out.println("Saque realizado com sucesso!");
-        System.out.println("\n\n");
-        LogOperacoes logOperacoes = new LogOperacoes(this, this, valor, TipoOperacoesEnum.SAQUE);
-        logOperacoes.toString();
-        return true;
+    public double getChequeEspecial() {
+        return chequeEspecial;
     }
 }

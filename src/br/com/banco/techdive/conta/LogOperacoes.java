@@ -70,6 +70,9 @@ public class LogOperacoes {
              mensagem = mensagem.replace("Conta Destino: " + this.contaDestino.getNumeroConta() +
                      "\nTitular Conta Destino: " + this.contaDestino.getNome() +
                      "\n", "");
+             mensagem = mensagem.replace("Conta Origem: " + this.contaOrigem.getNumeroConta() + "\n" +
+                     "Titular Conta Origem: " + this.contaOrigem.getNome() + "\n", "Conta: " + this.contaOrigem.getNumeroConta() + "\n" +
+                     "Titular Conta: " + this.contaOrigem.getNome() + "\n");
          }
 
          return mensagem;

@@ -1,10 +1,8 @@
 package br.com.banco.techdive.menu;
 
-import br.com.banco.techdive.conta.Conta;
-import br.com.banco.techdive.conta.ContaCorrente;
-import br.com.banco.techdive.conta.ContaInvestimento;
-import br.com.banco.techdive.conta.ContaPoupanca;
+import br.com.banco.techdive.conta.*;
 import br.com.banco.techdive.database.ContaDB;
+import br.com.banco.techdive.enumerators.TipoOperacoesEnum;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -52,6 +50,7 @@ public class MenuConta {
 
     public static void getTipoOperacaoSelecionada(Conta conta, int tipoOperacao) {
         Utils.separaLinha();
+        double valor;
         switch (tipoOperacao) {
             case 0:
                 MenuPrincipal.listarMenuPrincipal();
@@ -61,15 +60,17 @@ public class MenuConta {
                 break;
             case 2:
                 System.out.println("Digite o valor a ser depositado:");
-                conta.depositar(scanner.nextDouble());
+                valor = scanner.nextDouble();
+                new Transacao(conta, valor, TipoOperacoesEnum.DEPOSITO);
                 break;
             case 3:
                 System.out.println("Digite o valor a ser sacado:");
-                conta.sacar(scanner.nextDouble());
+                valor = scanner.nextDouble();
+                new Transacao(conta, valor, TipoOperacoesEnum.SAQUE);
                 break;
             case 4:
                 System.out.println("Digite o valor a ser transferido:");
-                double valor = scanner.nextDouble();
+                valor = scanner.nextDouble();
                 Utils.separaLinha();
                 System.out.println("Digite o número da conta para a qual deseja transferir:");
                 int numeroConta = scanner.nextInt();
@@ -85,7 +86,7 @@ public class MenuConta {
                 System.out.println("Conta Destino: \n");
                 contaDestino.toString();
                 Utils.separaLinha();
-                conta.transferir(contaDestino, valor);
+                new Transacao(conta, contaDestino, valor, TipoOperacoesEnum.TRANSFERENCIA);
                 break;
             case 5:
                 System.out.println("Saldo: " + conta.getSaldo());

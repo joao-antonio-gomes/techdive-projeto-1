@@ -3,8 +3,10 @@ package br.com.banco.techdive;
 import br.com.banco.techdive.conta.ContaCorrente;
 import br.com.banco.techdive.conta.ContaInvestimento;
 import br.com.banco.techdive.conta.ContaPoupanca;
+import br.com.banco.techdive.conta.Transacao;
 import br.com.banco.techdive.enumerators.AgenciaEnum;
 import br.com.banco.techdive.enumerators.InvetimentosEnum;
+import br.com.banco.techdive.enumerators.TipoOperacoesEnum;
 import br.com.banco.techdive.menu.MenuPrincipal;
 
 public class BancoTechDiveApplication {
@@ -22,17 +24,17 @@ public class BancoTechDiveApplication {
         ContaInvestimento lucas = new ContaInvestimento("Lucas", "31849843031", 9000, AgenciaEnum.SAO_JOSE, InvetimentosEnum.LCI);
 
         /* CRIAÇÃO TRANSAÇÕES */
-        joao.depositar(1000);
-        joao.sacar(500);
-        joao.transferir(roberta, 500);
-        rodolfo.sacar(200);
-        mario.depositar(1000);
-        adalberto.depositar(300);
-        adalberto.transferir(marcia, 200);
-        vanderlei.depositar(1000);
-        vanderlei.sacar(500);
-        maria.depositar(1000);
-        lucas.depositar(550);
+        new Transacao(joao, 1000, TipoOperacoesEnum.DEPOSITO);
+        new Transacao(mario, 1000, TipoOperacoesEnum.DEPOSITO);
+        new Transacao(adalberto, 300, TipoOperacoesEnum.DEPOSITO);
+        new Transacao(vanderlei, 500, TipoOperacoesEnum.DEPOSITO);
+        new Transacao(maria, 1000, TipoOperacoesEnum.DEPOSITO);
+        new Transacao(lucas, 550, TipoOperacoesEnum.DEPOSITO);
+        new Transacao(joao, 200, TipoOperacoesEnum.SAQUE);
+        new Transacao(rodolfo, 150, TipoOperacoesEnum.SAQUE);
+        new Transacao(vanderlei, 300, TipoOperacoesEnum.SAQUE);
+        new Transacao(joao, roberta, 300, TipoOperacoesEnum.TRANSFERENCIA);
+        new Transacao(adalberto, marcia, 300, TipoOperacoesEnum.TRANSFERENCIA);
 
         MenuPrincipal.listarMenuPrincipal();
     }

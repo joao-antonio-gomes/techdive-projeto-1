@@ -63,57 +63,6 @@ public abstract class Conta {
         System.out.println("Saldo: " + this.saldo);
     }
 
-    public boolean depositar(double valor) {
-        if (valor < 0) {
-            System.out.println("Por favor, informe um valor acima de zero!");
-            return false;
-        }
-        this.saldo += valor;
-        Utils.separaLinha();
-        System.out.println("Depósito realizado com sucesso!");
-        System.out.println("\n\n");
-        LogOperacoes logOperacoes = new LogOperacoes(this, this, valor, TipoOperacoesEnum.DEPOSITO);
-        logOperacoes.toString();
-        return true;
-    }
-
-    public boolean sacar(double valor) {
-        if (valor < 0) {
-            System.out.println("Por favor, informe um valor acima de zero!");
-            return false;
-        }
-        if (this.saldo < valor) {
-            System.out.println("Saldo insuficiente!");
-            return false;
-        }
-        this.saldo -= valor;
-        Utils.separaLinha();
-        System.out.println("Saque realizado com sucesso!");
-        System.out.println("\n\n");
-        LogOperacoes logOperacoes = new LogOperacoes(this, this, valor, TipoOperacoesEnum.SAQUE);
-        logOperacoes.toString();
-        return true;
-    }
-
-    public boolean transferir(Conta contaDestino, double valor) {
-        if (valor < 0) {
-            System.out.println("Por favor, informe um valor acima de zero!");
-            return false;
-        }
-        if (this.saldo < valor) {
-            System.out.println("Saldo insuficiente!");
-            return false;
-        }
-        this.setSaldo(this.getSaldo() - valor);
-        contaDestino.setSaldo(contaDestino.getSaldo() + valor);
-        Utils.separaLinha();
-        System.out.println("Transferência realizada com sucesso!\n");
-        System.out.println("\n\n");
-        LogOperacoes logOperacoes = new LogOperacoes(this, contaDestino, valor, TipoOperacoesEnum.TRANSFERENCIA);
-        logOperacoes.toString();
-        return true;
-    }
-
     public void extrato() {
         System.out.println("Extrato:");
         String saldo = String.format("%.2f", this.saldo);
